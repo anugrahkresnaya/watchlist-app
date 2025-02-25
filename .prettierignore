@@ -1,0 +1,8 @@
+node_modules
+.next
+.cache
+out
+public
+next-env.d.ts
+next.config.ts
+package-lock.json
