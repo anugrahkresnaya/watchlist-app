@@ -3,6 +3,8 @@ import pluginJs from "@eslint/js";
 import tseslint from "typescript-eslint";
 import pluginReact from "eslint-plugin-react";
 import eslintPluginPrettier from "eslint-plugin-prettier";
+import eslintPluginReactHooks from "eslint-plugin-react-hooks";
+import eslintPluginImport from "eslint-plugin-import";
 
 /** @type {import('eslint').Linter.FlatConfig[]} */
 export default [
@@ -16,6 +18,8 @@ export default [
     plugins: {
       react: pluginReact,
       prettier: eslintPluginPrettier,
+      "react-hooks": eslintPluginReactHooks,
+      import: eslintPluginImport,
     },
     settings: {
       react: {
