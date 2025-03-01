@@ -1,12 +1,38 @@
+'use client';
+import axios from 'axios';
+import { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { setReqToken } from '@/store/authSlice';
+
 const API_BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
-const Navbar = async () => {
-  const res = await fetch(`${API_BASE_URL}/api/auth/tmdb-auth/request-token`, {
-    cache: 'no-store'
-  });
-  const data = await res.json();
-  console.log('data', data);
-  const reqToken = data?.request_token;
+const Navbar = () => {
+  const dispatch = useDispatch();
+  const [reqToken, setReqTokenState] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchToken = async () => {
+      try {
+        const { data } = await axios.get(
+          `${API_BASE_URL}/api/auth/tmdb-auth/request-token`,
+          {
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          }
+        );
+
+        const token = data?.request_token;
+        console.log('token navbar', token);
+        setReqTokenState(token);
+        dispatch(setReqToken(token));
+      } catch (error) {
+        console.error('Error while fetching data:', error);
+      }
+    };
+
+    fetchToken();
+  }, [dispatch]);
 
   return (
     <nav className="flex justify-between">
