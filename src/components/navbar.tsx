@@ -5,6 +5,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import Link from 'next/link';
 import { setReqToken } from '@/store/authSlice';
 import { RootState } from '@/store';
+import { ModeToggle } from './ui/mode-toggle';
+import { Button } from './ui/button';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
@@ -52,27 +54,34 @@ const Navbar = () => {
   }, [fetchToken]);
 
   return (
-    <nav className="flex justify-between">
-      <h1>
-        <Link href="/">Watchlist</Link>
+    <nav className="flex justify-between my-4">
+      <h1 className="font-bold text-2xl">
+        <Link href="/">CrowzyNest</Link>
       </h1>
-      <ul className="flex justify-evenly">
+      <ul className="flex justify-evenly items-center gap-4">
         <li>
-          <Link href="/test-page">Create</Link>
+          <Link href="/test-page">
+            <Button variant="link">Create</Button>
+          </Link>
         </li>
         {sessionId ? (
-          <li>hellooo</li>
+          <li>
+            <Button variant="link">Hellooo! yourname</Button>
+          </li>
         ) : reqToken ? (
           <li>
             <a
               href={`https://www.themoviedb.org/authenticate/${reqToken}?redirect_to=${process.env.NEXT_PUBLIC_BASE_URL}/auth/callback`}
             >
-              Login
+              <Button variant="link">Login</Button>
             </a>
           </li>
         ) : (
           <li>{loading ? 'Loading...' : 'Login Unavailable'}</li>
         )}
+        <li>
+          <ModeToggle />
+        </li>
       </ul>
     </nav>
   );
