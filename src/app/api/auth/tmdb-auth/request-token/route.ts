@@ -13,9 +13,9 @@ export async function GET() {
     );
 
     return NextResponse.json(response.data);
-  } catch (error) {
+  } catch (err) {
     return NextResponse.json(
-      { error: 'Failed to get request token' },
+      { error: 'Failed to get request token', err },
       { status: 500 }
     );
   }
