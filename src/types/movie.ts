@@ -6,4 +6,6 @@ export type Movie = {
   backdrop_path: string;
   name?: string; // Optional since some responses might not have it
   overview: string;
+  first_air_date?: string;
+  media_type?: string;
 };
