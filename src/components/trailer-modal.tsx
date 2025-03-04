@@ -1,12 +1,9 @@
 import { DialogTitle } from '@radix-ui/react-dialog';
-import useVideos from '@/hooks/useVideos';
 import { TrailerModalProps } from '@/types/props';
 import { Drawer, DrawerContent, DrawerTrigger } from './ui/drawer';
 import { Button } from './ui/button';
 
-const TrailerModal: React.FC<TrailerModalProps> = ({ id, type }) => {
-  const { video, loading } = useVideos(id.toString(), type);
-
+const TrailerModal: React.FC<TrailerModalProps> = ({ trailerKey }) => {
   return (
     <Drawer>
       <DrawerTrigger asChild>
@@ -14,12 +11,10 @@ const TrailerModal: React.FC<TrailerModalProps> = ({ id, type }) => {
       </DrawerTrigger>
       <DrawerContent>
         <DialogTitle>Watch Trailer</DialogTitle>
-        {loading ? (
-          <p>Loading...</p>
-        ) : video ? (
+        {trailerKey ? (
           <iframe
             className="w-full h-[500] rounded-lg"
-            src={video}
+            src={`https://www.youtube.com/embed/${trailerKey}`}
             allowFullScreen
           />
         ) : (
