@@ -29,7 +29,6 @@ const Navbar = () => {
       return;
     }
     hasFetched.current = true;
-    console.log('session id exist', sessionId);
 
     try {
       setLoading(true);
