@@ -101,7 +101,9 @@ const Navbar = () => {
         </li>
         {sessionId ? (
           <li>
-            <Button variant="link">Hellooo! {username || 'User'}</Button>
+            <Link href="/profile">
+              <Button variant="link">Hellooo! {username || 'User'}</Button>
+            </Link>
           </li>
         ) : reqToken ? (
           <li>

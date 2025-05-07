@@ -20,8 +20,6 @@ export async function GET(request: NextRequest) {
       params: { session_id: sessionId }
     });
 
-    console.log('response', response);
-
     const accountId = response.data.id;
 
     if (!accountId) {
