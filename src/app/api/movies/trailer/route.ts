@@ -22,7 +22,6 @@ export async function GET(req: Request) {
         Authorization: `Bearer ${API_KEY_TMDB}`
       }
     });
-    console.log('data trailers', data);
 
     const trailers = data.results.filter(
       (video: any) => video.type === 'Trailer'

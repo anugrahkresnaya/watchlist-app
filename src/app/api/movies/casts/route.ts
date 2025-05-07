@@ -6,27 +6,26 @@ const BASE_URL = 'https://api.themoviedb.org/3';
 
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
-  const tvId = searchParams.get('id');
+  const movieId = searchParams.get('id');
 
-  if (!tvId) {
-    return NextResponse.json({ error: 'Tv ID is required' }, { status: 400 });
+  if (!movieId) {
+    return NextResponse.json(
+      { error: 'Movie ID is required' },
+      { status: 400 }
+    );
   }
 
   try {
-    const { data } = await axios.get(`${BASE_URL}/tv/${tvId}/videos`, {
+    const { data } = await axios.get(`${BASE_URL}/movie/${movieId}/credits`, {
       headers: {
         Accept: 'application/json',
         Authorization: `Bearer ${API_KEY_TMDB}`
       }
     });
 
-    const trailers = data.results.filter(
-      (video: any) => video.type === 'Trailer'
-    );
-
-    return NextResponse.json(trailers.length > 0 ? trailers[0] : {});
+    return NextResponse.json(data, { status: 200 });
   } catch (error) {
-    console.error('Error while fetching tv details', error);
+    console.error('Error while fetching movie credits', error);
     return NextResponse.json(
       { error: 'Failed to fetch data' },
       { status: 500 }

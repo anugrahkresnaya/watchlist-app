@@ -13,20 +13,16 @@ export async function GET(req: Request) {
   }
 
   try {
-    const { data } = await axios.get(`${BASE_URL}/tv/${tvId}/videos`, {
+    const { data } = await axios.get(`${BASE_URL}/tv/${tvId}/credits`, {
       headers: {
         Accept: 'application/json',
         Authorization: `Bearer ${API_KEY_TMDB}`
       }
     });
 
-    const trailers = data.results.filter(
-      (video: any) => video.type === 'Trailer'
-    );
-
-    return NextResponse.json(trailers.length > 0 ? trailers[0] : {});
+    return NextResponse.json(data, { status: 200 });
   } catch (error) {
-    console.error('Error while fetching tv details', error);
+    console.error('Error while fetching tv credits', error);
     return NextResponse.json(
       { error: 'Failed to fetch data' },
       { status: 500 }

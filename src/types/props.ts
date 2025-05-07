@@ -1,3 +1,4 @@
+import { Cast, Crew } from './credits';
 import { Movie } from './movie';
 
 export type MovieSectionProps = {
@@ -22,9 +23,22 @@ export interface MediaDetailsProps {
   overview: string;
   posterPath: string;
   backdropPath: string;
+  cast: Cast[];
+  crew: Crew[];
+  trailerKey: string;
 }
 
 export interface TrailerModalProps {
   id: number | string;
   type: 'movies' | 'tv';
+  trailerKey: string;
+}
+
+export interface CastSectionProps {
+  casts: Cast[];
+  crews: Crew[];
+}
+
+export interface RecommendationSectionProps {
+  movies: Movie[];
 }

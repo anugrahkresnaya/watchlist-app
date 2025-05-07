@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Link from 'next/link';
-import { setReqToken } from '@/store/authSlice';
+import { setReqToken, setUsername } from '@/store/authSlice';
 import { RootState } from '@/store';
 import { ModeToggle } from './ui/mode-toggle';
 import { Button } from './ui/button';
@@ -14,7 +14,9 @@ const Navbar = () => {
   const dispatch = useDispatch();
   const sessionId = useSelector((state: RootState) => state.auth.sessionId);
   const reqToken = useSelector((state: RootState) => state.auth.reqToken);
+  const username = useSelector((state: RootState) => state.auth.username);
   const hasFetched = useRef(false);
+  const hasCheckedUser = useRef(false);
   const [loading, setLoading] = useState(false);
 
   const headers = useMemo(
@@ -29,7 +31,6 @@ const Navbar = () => {
       return;
     }
     hasFetched.current = true;
-    console.log('session id exist', sessionId);
 
     try {
       setLoading(true);
@@ -49,9 +50,43 @@ const Navbar = () => {
     }
   }, [reqToken, sessionId, dispatch, headers]);
 
+  const fetchUserDetails = useCallback(async () => {
+    if (!sessionId || hasCheckedUser.current || username) {
+      return;
+    }
+    hasCheckedUser.current = true;
+
+    try {
+      setLoading(true);
+      const { data } = await axios.get(
+        `${API_BASE_URL}/api/auth/tmdb-auth/account`,
+        {
+          params: { session_id: sessionId },
+          headers
+        }
+      );
+
+      console.log('data user', data);
+
+      if (data?.username || data?.name) {
+        dispatch(setUsername(data?.username || data?.name));
+      }
+    } catch (error) {
+      console.error('Error fetching data user details', error);
+    } finally {
+      setLoading(false);
+    }
+  }, [sessionId, username, dispatch, headers]);
+
   useEffect(() => {
     fetchToken();
   }, [fetchToken]);
+
+  useEffect(() => {
+    if (sessionId) {
+      fetchUserDetails();
+    }
+  }, [sessionId, fetchUserDetails]);
 
   return (
     <nav className="flex justify-between my-4">
@@ -66,7 +101,7 @@ const Navbar = () => {
         </li>
         {sessionId ? (
           <li>
-            <Button variant="link">Hellooo! yourname</Button>
+            <Button variant="link">Hellooo! {username || 'User'}</Button>
           </li>
         ) : reqToken ? (
           <li>
