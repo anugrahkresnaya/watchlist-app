@@ -73,7 +73,7 @@ const MediaDetails: React.FC<MediaDetailsProps> = async ({
           {/* Movie Info */}
           <div className="flex-1">
             <h1 className="text-3xl lg:text-4xl font-bold">{title}</h1>
-            <div className="flex items-center text-sm mt-2 space-x-4 text-sm h-5">
+            <div className="flex items-center mt-2 space-x-4 text-sm h-5">
               <span>{releaseYear}</span>
               <Separator orientation="vertical" />
               <span>{runtime} min</span>
