@@ -38,3 +38,7 @@ export interface CastSectionProps {
   casts: Cast[];
   crews: Crew[];
 }
+
+export interface RecommendationSectionProps {
+  movies: Movie[];
+}
