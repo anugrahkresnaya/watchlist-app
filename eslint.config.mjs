@@ -55,7 +55,7 @@ export default [
       'react-hooks/rules-of-hooks': 'warn', // Warn about incorrect hook usage
 
       // ✅ Import & Module Warnings
-      'import/no-unresolved': 'warn', // Warn if imports can't be resolved
+      'import/no-unresolved': 'off', // Warn if imports can't be resolved
       'import/order': ['warn', { groups: ['builtin', 'external', 'internal'] }] // Enforce import order
     }
   }

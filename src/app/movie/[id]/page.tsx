@@ -1,5 +1,4 @@
 import MediaDetails from '@/components/media-details';
-
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
 const MoviePage = async ({ params }: { params: { id: string } }) => {
