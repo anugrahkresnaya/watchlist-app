@@ -51,7 +51,7 @@ const useWatchlist = ({ mediaId, mediaType }: useWatchlistProps) => {
       setLoading(true);
       setError(null);
 
-      await axios.post('api/auth/tmdb-auth/account/watchlist', {
+      await axios.post('/api/auth/tmdb-auth/account/watchlist', {
         mediaId,
         mediaType,
         sessionId,
@@ -78,7 +78,7 @@ const useWatchlist = ({ mediaId, mediaType }: useWatchlistProps) => {
       setLoading(true);
       setError(null);
 
-      await axios.post('api/auth/tmdb-auth/account/watchlist', {
+      await axios.post('/api/auth/tmdb-auth/account/watchlist', {
         mediaId,
         mediaType,
         sessionId,
@@ -86,7 +86,7 @@ const useWatchlist = ({ mediaId, mediaType }: useWatchlistProps) => {
         action: 'remove'
       });
 
-      setIsInWatchlist(true);
+      setIsInWatchlist(false);
     } catch (err) {
       console.error('Error adding to watchlist:', err);
       setError('Failed to add to watchlist');

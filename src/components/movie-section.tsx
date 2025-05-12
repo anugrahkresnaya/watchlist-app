@@ -7,7 +7,7 @@ export const FALLBACK_IMAGE = '/fallback.jpg';
 
 const MovieSection: React.FC<MovieSectionProps> = ({
   title,
-  movies,
+  movie,
   loading,
   link
 }) => {
@@ -23,7 +23,7 @@ const MovieSection: React.FC<MovieSectionProps> = ({
         <p className="text-gray-500">Loading...</p>
       ) : (
         <ul className="flex flex-wrap justify-center md:justify-between gap-4 mt-4">
-          {movies.slice(0, 6).map(movie => (
+          {movie.slice(0, 6).map(movie => (
             <li key={movie.id} className="min-w-[170px] max-w-[170px]">
               <Link href={`/${movie.media_type ?? 'movie'}/${movie.id}`}>
                 <div className="w-full aspect-[2/3] relative">

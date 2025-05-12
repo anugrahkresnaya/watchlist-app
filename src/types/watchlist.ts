@@ -1,11 +1,11 @@
 export interface useWatchlistProps {
   mediaId: string | number;
-  mediaType: 'movies' | 'tv';
+  mediaType: 'movie' | 'tv';
 }
 
 export interface WatchlistButtonProps {
   mediaId: string | number;
-  mediaType: 'movies' | 'tv';
+  mediaType: 'movie' | 'tv';
   className?: string;
   redirectPath?: string;
 }

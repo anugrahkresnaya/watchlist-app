@@ -22,25 +22,25 @@ export default function Home() {
       <BestOfTheWeek allTrending={allTrending} />
       <MovieSection
         title="Now Playing"
-        movies={nowPlaying}
+        movie={nowPlaying}
         loading={loadingNowPlaying}
         link="/now-playing"
       />
       <MovieSection
         title="Popular Movies Right Now"
-        movies={popularMovies}
+        movie={popularMovies}
         loading={loadingPopular}
         link="/popular-movies"
       />
       <MovieSection
         title="Trending"
-        movies={allTrending}
+        movie={allTrending}
         loading={loadingTrending}
         link="/trending"
       />
       <MovieSection
         title="Upcoming Shows"
-        movies={upcoming}
+        movie={upcoming}
         loading={loadingUpcoming}
         link="/upcoming"
       />

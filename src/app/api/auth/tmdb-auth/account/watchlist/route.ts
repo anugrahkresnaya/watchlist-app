@@ -1,8 +1,7 @@
 import axios from 'axios';
 import { NextRequest, NextResponse } from 'next/server';
-import { error } from 'node:console';
 
-const API_KEY_TMDB = process.env.NEXT_PUBLIC_API_KEY_TMDB;
+const API_KEY_TMDB = process.env.API_KEY_TMDB;
 
 export async function POST(request: NextRequest) {
   try {
@@ -16,11 +15,20 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Log the request for debugging
+    console.log('Watchlist request:', {
+      accountId,
+      mediaId,
+      mediaType,
+      action,
+      apiKey: API_KEY_TMDB ? 'Present' : 'Missing'
+    });
+
     const watchlistResponse = await axios.post(
-      `https://api.themoviedb.org/account/${accountId}/watchlist`,
+      `https://api.themoviedb.org/3/account/${accountId}/watchlist`,
       {
         media_type: mediaType,
-        media_id: mediaId,
+        media_id: parseInt(String(mediaId), 10),
         watchlist: action === 'add'
       },
       {
@@ -57,7 +65,7 @@ export async function GET(request: NextRequest) {
     }
 
     const watchlistResponse = await axios.get(
-      `https://api.themoviedb.org/3/account/${accountId}/watchlist`,
+      `https://api.themoviedb.org/3/account/${accountId}/watchlist/${mediaType === 'movies' ? 'movies' : 'tv'}`,
       {
         headers: { Authorization: `Bearer ${API_KEY_TMDB}` },
         params: { session_id: sessionId }
