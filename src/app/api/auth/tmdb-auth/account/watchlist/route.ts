@@ -65,7 +65,7 @@ export async function GET(request: NextRequest) {
     );
 
     const isInWatchlist = watchlistResponse.data.results.some(
-      (item: any) => item.id === parseInt(mediaId as String)
+      (item: any) => item.id === parseInt(mediaId as string)
     );
 
     return NextResponse.json({ isInWatchlist });
