@@ -8,6 +8,11 @@ const nextConfig: NextConfig = {
         protocol: 'https',
         hostname: 'image.tmdb.org',
         pathname: '**'
+      },
+      {
+        protocol: 'https',
+        hostname: 'www.gravatar.com',
+        pathname: '**'
       }
     ]
   }

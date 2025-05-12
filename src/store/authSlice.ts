@@ -5,12 +5,14 @@ interface AuthState {
   reqToken: string | null;
   sessionId: string | null;
   username: string | null;
+  accountId: number | null;
 }
 
 const initialState: AuthState = {
   reqToken: null,
   sessionId: null,
-  username: null
+  username: null,
+  accountId: null
 };
 
 const authSlice = createSlice({
@@ -26,14 +28,18 @@ const authSlice = createSlice({
     setUsername: (state, action: PayloadAction<string | null>) => {
       state.username = action.payload;
     },
+    setAccountId: (state, action: PayloadAction<number | null>) => {
+      state.accountId = action.payload;
+    },
     logout: state => {
       state.reqToken = null;
       state.sessionId = null;
       state.username = null;
+      state.accountId = null;
     }
   }
 });
 
-export const { setReqToken, setSessionId, setUsername, logout } =
+export const { setReqToken, setSessionId, setUsername, setAccountId, logout } =
   authSlice.actions;
 export default authSlice.reducer;

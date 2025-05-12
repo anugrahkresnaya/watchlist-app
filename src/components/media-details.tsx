@@ -4,6 +4,7 @@ import TrailerModal from './trailer-modal';
 import { Separator } from './ui/separator';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
 import CreditSection from './credit-section';
+import WatchlistButton from './WatchlistButton';
 
 const MediaDetails: React.FC<MediaDetailsProps> = async ({
   id,
@@ -60,12 +61,11 @@ const MediaDetails: React.FC<MediaDetailsProps> = async ({
             />
             {/* Buttons */}
             <div className="mt-6 flex flex-col gap-4">
-              <button className="bg-red-500 hover:bg-red-600 px-5 py-2 text-white rounded-lg">
-                + Add to List
-              </button>
-              {/* <button className="bg-gray-600 hover:bg-gray-700 px-5 py-2 text-white rounded-lg">
-                ▶ Watch Trailer
-              </button> */}
+              <WatchlistButton
+                mediaId={id}
+                mediaType={type}
+                redirectPath={`/${type}/${id}`}
+              />
               <TrailerModal id={id} type={type} trailerKey={trailerKey} />
             </div>
           </div>

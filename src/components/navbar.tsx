@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Link from 'next/link';
-import { setReqToken, setUsername } from '@/store/authSlice';
+import { setAccountId, setReqToken, setUsername } from '@/store/authSlice';
 import { RootState } from '@/store';
 import { ModeToggle } from './ui/mode-toggle';
 import { Button } from './ui/button';
@@ -15,6 +15,7 @@ const Navbar = () => {
   const sessionId = useSelector((state: RootState) => state.auth.sessionId);
   const reqToken = useSelector((state: RootState) => state.auth.reqToken);
   const username = useSelector((state: RootState) => state.auth.username);
+  const accountId = useSelector((state: RootState) => state.auth.accountId);
   const hasFetched = useRef(false);
   const hasCheckedUser = useRef(false);
   const [loading, setLoading] = useState(false);
@@ -71,6 +72,10 @@ const Navbar = () => {
       if (data?.username || data?.name) {
         dispatch(setUsername(data?.username || data?.name));
       }
+
+      if (data?.id) {
+        dispatch(setAccountId(data.id));
+      }
     } catch (error) {
       console.error('Error fetching data user details', error);
     } finally {
@@ -101,7 +106,9 @@ const Navbar = () => {
         </li>
         {sessionId ? (
           <li>
-            <Button variant="link">Hellooo! {username || 'User'}</Button>
+            <Link href="/profile">
+              <Button variant="link">Hellooo! {username || 'User'}</Button>
+            </Link>
           </li>
         ) : reqToken ? (
           <li>
