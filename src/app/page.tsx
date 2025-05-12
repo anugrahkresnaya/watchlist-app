@@ -1,7 +1,10 @@
 'use client';
+import { useSelector } from 'react-redux';
 import MovieSection from '@/components/movie-section';
 import useMovies from '@/hooks/useMovies';
 import BestOfTheWeek from '@/components/bestOfTheWeek';
+import { RootState } from '@/store';
+import useWatchlistItems from '@/hooks/useWatchlistItems';
 
 export default function Home() {
   const { movies: popularMovies, loading: loadingPopular } = useMovies(
@@ -17,9 +20,20 @@ export default function Home() {
     '/api/movies/upcoming'
   );
 
+  const sessionId = useSelector((state: RootState) => state.auth.sessionId);
+
+  const { watchlistItems, loading: loadingWatchlist } = useWatchlistItems();
+  const hasWatchlistItems = sessionId && watchlistItems.length > 0;
+
   return (
     <div className="px-6 py-4">
       <BestOfTheWeek allTrending={allTrending} />
+      <MovieSection
+        title="My Binge List"
+        movie={watchlistItems}
+        loading={loadingWatchlist}
+        link="/watchlist"
+      />
       <MovieSection
         title="Now Playing"
         movie={nowPlaying}

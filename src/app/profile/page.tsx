@@ -1,12 +1,12 @@
 'use client';
 
-import { RootState } from '@/store';
-import { TMDBUserProfile } from '@/types/user';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import Image from 'next/image';
+import { TMDBUserProfile } from '@/types/user';
+import { RootState } from '@/store';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -18,6 +18,8 @@ import {
 } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { Skeleton } from '@/components/ui/skeleton';
+import MovieSection from '@/components/movie-section';
+import useWatchlistItems from '@/hooks/useWatchlistItems';
 
 export default function ProfilePage() {
   const router = useRouter();
@@ -27,6 +29,9 @@ export default function ProfilePage() {
   const [profileData, setProfileData] = useState<TMDBUserProfile | null>(null);
   const [error, setError] = useState<string | null>(null);
   const hasFetched = useRef<boolean>(false);
+
+  const { watchlistItems, loading: loadingWatchlist } = useWatchlistItems();
+  const hasWatchlistItems = watchlistItems.length > 0;
 
   const fetchUserProfile = useCallback(async () => {
     if (hasFetched.current) {
@@ -173,6 +178,17 @@ export default function ProfilePage() {
           </Button>
         </CardFooter>
       </Card>
+      {/* Watchlist Section */}
+      {hasWatchlistItems && (
+        <div className="mt-8 max-w-5xl mx-auto">
+          <MovieSection
+            title="My Watchlist"
+            movie={watchlistItems}
+            loading={loadingWatchlist}
+            link="/watchlist"
+          />
+        </div>
+      )}
     </div>
   );
 }

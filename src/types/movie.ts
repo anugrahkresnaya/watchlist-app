@@ -8,4 +8,5 @@ export type Movie = {
   overview: string;
   first_air_date?: string;
   media_type?: string;
+  vote_average?: number;
 };
