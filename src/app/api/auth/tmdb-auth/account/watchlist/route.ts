@@ -57,78 +57,60 @@ export async function GET(request: NextRequest) {
     const sessionId = searchParams.get('sessionId');
     const accountId = searchParams.get('accountId');
 
-    // fetch complete watchlist (both movies and tv shows)
-    if (sessionId && accountId) {
-      try {
-        const moviesResponse = await axios.get(
-          `https://api.themoviedb.org/3/account/${accountId}/watchlist/movies`,
-          {
-            headers: { Authorization: `Bearer ${API_KEY_TMDB}` },
-            params: { session_id: sessionId }
-          }
-        );
-
-        const tvResponse = await axios.get(
-          `https://api.themoviedb.org/3/account/${accountId}/watchlist/tv`,
-          {
-            headers: { Authorization: `Bearer ${API_KEY_TMDB}` },
-            params: { session_id: sessionId }
-          }
-        );
-
-        // combine and add media media_type
-        const movies = moviesResponse.data.results.map(
-          (item: Record<string, string>) => ({
-            ...item,
-            media_type: 'movie'
-          })
-        );
-
-        const tvShows = tvResponse.data.results.map(
-          (item: Record<string, string>) => ({
-            ...item,
-            media_type: 'tv'
-          })
-        );
-
-        const combinedResults = [...movies, ...tvShows];
-
-        return NextResponse.json({
-          results: combinedResults,
-          total_results: combinedResults.length,
-          total_pages: 1,
-          page: 1
-        });
-      } catch (err) {
-        console.error('Failed to fetch complete watchlist:', err);
-        return NextResponse.json(
-          { error: 'Failed to fetch watchlist items' },
-          { status: 500 }
-        );
-      }
-    }
-
-    // check specific item is in the watchlist
-    if (!mediaId || !mediaType || !sessionId) {
-      return NextResponse.json(
-        { error: 'Missing required parameters' },
-        { status: 400 }
+    // 1. Check specific item watchlist status if mediaId and mediaType are provided
+    if (mediaId && mediaType && sessionId && accountId) {
+      const watchlistResponse = await axios.get(
+        `https://api.themoviedb.org/3/account/${accountId}/watchlist/${mediaType === 'movie' ? 'movies' : 'tv'}`,
+        {
+          headers: { Authorization: `Bearer ${API_KEY_TMDB}` },
+          params: { session_id: sessionId }
+        }
       );
+
+      const isInWatchlist = watchlistResponse.data.results.some(
+        (item: any) => item.id === parseInt(mediaId as string, 10)
+      );
+
+      return NextResponse.json({ isInWatchlist });
     }
 
-    const watchlistResponse = await axios.get(
-      `https://api.themoviedb.org/3/account/${accountId}/watchlist/${mediaType === 'movies' ? 'movies' : 'tv'}`,
-      {
-        headers: { Authorization: `Bearer ${API_KEY_TMDB}` },
-        params: { session_id: sessionId }
-      }
-    );
+    // 2. Otherwise, if only sessionId and accountId are provided, fetch all watchlist items
+    if (sessionId && accountId) {
+      const moviesResponse = await axios.get(
+        `https://api.themoviedb.org/3/account/${accountId}/watchlist/movies`,
+        {
+          headers: { Authorization: `Bearer ${API_KEY_TMDB}` },
+          params: { session_id: sessionId }
+        }
+      );
 
-    const isInWatchlist = watchlistResponse.data.results.some(
-      (item: any) => item.id === parseInt(mediaId as string)
-    );
+      const tvResponse = await axios.get(
+        `https://api.themoviedb.org/3/account/${accountId}/watchlist/tv`,
+        {
+          headers: { Authorization: `Bearer ${API_KEY_TMDB}` },
+          params: { session_id: sessionId }
+        }
+      );
 
-    return NextResponse.json({ isInWatchlist });
+      const movies = moviesResponse.data.results.map((item: any) => ({
+        ...item,
+        media_type: 'movie'
+      }));
+
+      const tvShows = tvResponse.data.results.map((item: any) => ({
+        ...item,
+        media_type: 'tv'
+      }));
+
+      const combinedResults = [...movies, ...tvShows];
+
+      return NextResponse.json({
+        results: combinedResults,
+        total_results: combinedResults.length,
+        total_pages: 1,
+        page: 1
+      });
+    }
   } catch (err) {
     console.error('Watchlist status check failed:', err);
     return NextResponse.json(

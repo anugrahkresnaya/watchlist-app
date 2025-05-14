@@ -32,6 +32,8 @@ const useWatchlist = ({ mediaId, mediaType }: useWatchlistProps) => {
         }
       );
 
+      console.log('check is ini watchlist', data);
+
       setIsInWatchlist(data.isInWatchlist);
     } catch (err) {
       console.error('Error checking watchlist status: ', err);
