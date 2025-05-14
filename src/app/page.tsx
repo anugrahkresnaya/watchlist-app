@@ -26,14 +26,16 @@ export default function Home() {
   const hasWatchlistItems = sessionId && watchlistItems.length > 0;
 
   return (
-    <div className="px-6 py-4">
+    <div className="container mx-auto px-4 sm:px-6 py-4">
       <BestOfTheWeek allTrending={allTrending} />
-      <MovieSection
-        title="My Binge List"
-        movie={watchlistItems}
-        loading={loadingWatchlist}
-        link="/watchlist"
-      />
+      {hasWatchlistItems && (
+        <MovieSection
+          title="My Binge List"
+          movie={watchlistItems}
+          loading={loadingWatchlist}
+          link="/watchlist"
+        />
+      )}
       <MovieSection
         title="Now Playing"
         movie={nowPlaying}
