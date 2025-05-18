@@ -3,10 +3,18 @@ import axios from 'axios';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Link from 'next/link';
+import { Menu } from 'lucide-react';
 import { setAccountId, setReqToken, setUsername } from '@/store/authSlice';
 import { RootState } from '@/store';
 import { ModeToggle } from './ui/mode-toggle';
 import { Button } from './ui/button';
+import {
+  Menubar,
+  MenubarContent,
+  MenubarItem,
+  MenubarMenu,
+  MenubarTrigger
+} from './ui/menubar';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
@@ -93,38 +101,82 @@ const Navbar = () => {
     }
   }, [sessionId, fetchUserDetails]);
 
+  const renderMenu = (
+    <>
+      <li>
+        <Link href="/test-page">
+          <Button variant="link">Create</Button>
+        </Link>
+      </li>
+      {sessionId ? (
+        <li>
+          <Link href="/profile">
+            <Button variant="link">Hellooo! {username || 'User'}</Button>
+          </Link>
+        </li>
+      ) : reqToken ? (
+        <li>
+          <a
+            href={`https://www.themoviedb.org/authenticate/${reqToken}?redirect_to=${process.env.NEXT_PUBLIC_BASE_URL}/auth/callback`}
+          >
+            <Button variant="link">Login</Button>
+          </a>
+        </li>
+      ) : (
+        <li>{loading ? 'Loading...' : 'Login Unavailable'}</li>
+      )}
+      <li>
+        <ModeToggle />
+      </li>
+    </>
+  );
+
   return (
     <nav className="flex justify-between my-4">
       <h1 className="font-bold text-2xl">
         <Link href="/">CrowzyNest</Link>
       </h1>
-      <ul className="flex justify-evenly items-center gap-4">
-        <li>
-          <Link href="/test-page">
-            <Button variant="link">Create</Button>
-          </Link>
-        </li>
-        {sessionId ? (
-          <li>
-            <Link href="/profile">
-              <Button variant="link">Hellooo! {username || 'User'}</Button>
-            </Link>
-          </li>
-        ) : reqToken ? (
-          <li>
-            <a
-              href={`https://www.themoviedb.org/authenticate/${reqToken}?redirect_to=${process.env.NEXT_PUBLIC_BASE_URL}/auth/callback`}
-            >
-              <Button variant="link">Login</Button>
-            </a>
-          </li>
-        ) : (
-          <li>{loading ? 'Loading...' : 'Login Unavailable'}</li>
-        )}
-        <li>
-          <ModeToggle />
-        </li>
+
+      {/* desktop menu */}
+      <ul className="hidden sm:flex justify-evenly items-center gap-4">
+        {renderMenu}
       </ul>
+
+      {/* mobile menu */}
+      <div className="sm:hidden">
+        <Menubar>
+          <MenubarMenu>
+            <MenubarTrigger>
+              <Menu className="w-6 h-6" />
+            </MenubarTrigger>
+            <MenubarContent align="end">
+              <MenubarItem asChild>
+                <Link href="/">Create</Link>
+              </MenubarItem>
+              {sessionId ? (
+                <MenubarItem asChild>
+                  <Link href="/profile">Hello, {username || 'User'}!</Link>
+                </MenubarItem>
+              ) : reqToken ? (
+                <MenubarItem asChild>
+                  <a
+                    href={`https://www.themoviedb.org/authenticate/${reqToken}?redirect_to=${process.env.NEXT_PUBLIC_BASE_URL}/auth/callback`}
+                  >
+                    Login
+                  </a>
+                </MenubarItem>
+              ) : (
+                <MenubarItem disabled>
+                  {loading ? 'Loading...' : 'Login Unavailable'}
+                </MenubarItem>
+              )}
+              <MenubarItem>
+                <ModeToggle />
+              </MenubarItem>
+            </MenubarContent>
+          </MenubarMenu>
+        </Menubar>
+      </div>
     </nav>
   );
 };

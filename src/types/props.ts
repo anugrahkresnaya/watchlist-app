@@ -3,7 +3,7 @@ import { Movie } from './movie';
 
 export type MovieSectionProps = {
   title: string;
-  movies: Movie[];
+  movie: Movie[];
   loading: boolean;
   link: string;
 };
@@ -14,7 +14,7 @@ export type BestOfTheWeekProps = {
 
 export interface MediaDetailsProps {
   id: number | string;
-  type: 'movies' | 'tv';
+  type: 'movie' | 'tv';
   title: string;
   releaseYear: string;
   runtime?: number;
@@ -30,7 +30,7 @@ export interface MediaDetailsProps {
 
 export interface TrailerModalProps {
   id: number | string;
-  type: 'movies' | 'tv';
+  type: 'movie' | 'tv';
   trailerKey: string;
 }
 
@@ -40,5 +40,5 @@ export interface CastSectionProps {
 }
 
 export interface RecommendationSectionProps {
-  movies: Movie[];
+  movie: Movie[];
 }

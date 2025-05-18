@@ -28,7 +28,7 @@ const MoviePage = async ({ params }: { params: { id: string } }) => {
   return (
     <MediaDetails
       id={id}
-      type="movies"
+      type="movie"
       title={data.title}
       releaseYear={new Date(data.release_date).getFullYear().toString()}
       runtime={data.runtime}

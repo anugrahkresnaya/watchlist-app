@@ -1,3 +1,4 @@
+'use client';
 import { useRouter } from 'next/navigation';
 import { useSelector } from 'react-redux';
 import { toast } from 'sonner';
@@ -45,8 +46,8 @@ const WatchlistButton = ({
       disabled={loading}
       className={`${className} ${
         isInWatchlist
-          ? 'bg-green-600 hover:bg-green-700'
-          : 'bg-red-600 hover:bg-red-700'
+          ? 'bg-green-600 hover:bg-green-700 text-white'
+          : 'bg-red-600 hover:bg-red-700 text-white'
       }`}
     >
       {loading

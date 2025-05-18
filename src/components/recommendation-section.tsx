@@ -1,6 +1,6 @@
-import { RecommendationSectionProps } from '@/types/props';
 import Image from 'next/image';
 import Link from 'next/link';
+import { RecommendationSectionProps } from '@/types/props';
 import { FALLBACK_IMAGE } from './movie-section';
 import { Button } from './ui/button';
 import {
@@ -12,14 +12,14 @@ import {
 } from './ui/carousel';
 
 const RecommendationSection: React.FC<RecommendationSectionProps> = ({
-  movies
+  movie
 }) => {
   return (
     <div className="w-full">
       <h2 className="text-2xl font-bold items-center">Shows you might like</h2>
       <Carousel className="w-full">
         <CarouselContent className="-ml-1">
-          {movies.map(movie => (
+          {movie.map(movie => (
             <CarouselItem
               key={movie.id}
               className="pl- basis-auto overflow-hidden"
