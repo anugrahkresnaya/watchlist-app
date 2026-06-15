@@ -1,5 +1,5 @@
-import axios from 'axios';
 import { NextRequest, NextResponse } from 'next/server';
+import { tmdb } from '@/lib/tmdb';
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
@@ -13,10 +13,7 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    const API_KEY_TMDB = process.env.API_KEY_TMDB;
-
-    const response = await axios.get('https://api.themoviedb.org/3/account', {
-      headers: { Authorization: `Bearer ${API_KEY_TMDB}` },
+    const response = await tmdb.get('/account', {
       params: { session_id: sessionId }
     });
 
@@ -29,13 +26,9 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    const detailsResponse = await axios.get(
-      `https://api.themoviedb.org/3/account/${accountId}`,
-      {
-        headers: { Authorization: `Bearer ${API_KEY_TMDB}` },
-        params: { session_id: sessionId }
-      }
-    );
+    const detailsResponse = await tmdb.get(`/account/${accountId}`, {
+      params: { session_id: sessionId }
+    });
 
     return NextResponse.json(detailsResponse.data);
   } catch (error) {

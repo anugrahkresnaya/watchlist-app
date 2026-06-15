@@ -1,7 +1,5 @@
-import axios from 'axios';
 import { NextRequest, NextResponse } from 'next/server';
-
-const API_KEY_TMDB = process.env.API_KEY_TMDB;
+import { tmdb } from '@/lib/tmdb';
 
 export async function POST(request: NextRequest) {
   try {
@@ -15,27 +13,15 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Log the request for debugging
-    console.log('Watchlist request:', {
-      accountId,
-      mediaId,
-      mediaType,
-      action,
-      apiKey: API_KEY_TMDB ? 'Present' : 'Missing'
-    });
-
-    const watchlistResponse = await axios.post(
-      `https://api.themoviedb.org/3/account/${accountId}/watchlist`,
+    const watchlistResponse = await tmdb.post(
+      `/account/${accountId}/watchlist`,
       {
         media_type: mediaType,
         media_id: parseInt(String(mediaId), 10),
         watchlist: action === 'add'
       },
       {
-        headers: {
-          Authorization: `Bearer ${API_KEY_TMDB}`,
-          'Content-Type': 'application/json'
-        },
+        headers: { 'Content-Type': 'application/json' },
         params: { session_id: sessionId }
       }
     );
@@ -59,10 +45,9 @@ export async function GET(request: NextRequest) {
 
     // 1. Check specific item watchlist status if mediaId and mediaType are provided
     if (mediaId && mediaType && sessionId && accountId) {
-      const watchlistResponse = await axios.get(
-        `https://api.themoviedb.org/3/account/${accountId}/watchlist/${mediaType === 'movie' ? 'movies' : 'tv'}`,
+      const watchlistResponse = await tmdb.get(
+        `/account/${accountId}/watchlist/${mediaType === 'movie' ? 'movies' : 'tv'}`,
         {
-          headers: { Authorization: `Bearer ${API_KEY_TMDB}` },
           params: { session_id: sessionId }
         }
       );
@@ -76,21 +61,16 @@ export async function GET(request: NextRequest) {
 
     // 2. Otherwise, if only sessionId and accountId are provided, fetch all watchlist items
     if (sessionId && accountId) {
-      const moviesResponse = await axios.get(
-        `https://api.themoviedb.org/3/account/${accountId}/watchlist/movies`,
+      const moviesResponse = await tmdb.get(
+        `/account/${accountId}/watchlist/movies`,
         {
-          headers: { Authorization: `Bearer ${API_KEY_TMDB}` },
           params: { session_id: sessionId }
         }
       );
 
-      const tvResponse = await axios.get(
-        `https://api.themoviedb.org/3/account/${accountId}/watchlist/tv`,
-        {
-          headers: { Authorization: `Bearer ${API_KEY_TMDB}` },
-          params: { session_id: sessionId }
-        }
-      );
+      const tvResponse = await tmdb.get(`/account/${accountId}/watchlist/tv`, {
+        params: { session_id: sessionId }
+      });
 
       const movies = moviesResponse.data.results.map((item: any) => ({
         ...item,

@@ -1,22 +1,14 @@
-import axios from 'axios';
 import { NextResponse } from 'next/server';
+import { tmdb } from '@/lib/tmdb';
 
 export async function GET() {
   try {
-    const API_KEY_TMDB = process.env.API_KEY_TMDB;
     const lang = 'en-US';
     const page = 1;
 
-    const { data } = await axios.get(
-      'https://api.themoviedb.org/3/movie/popular',
-      {
-        params: { language: lang, page },
-        headers: {
-          Accept: 'application/json',
-          Authorization: `Bearer ${API_KEY_TMDB}`
-        }
-      }
-    );
+    const { data } = await tmdb.get('/movie/popular', {
+      params: { language: lang, page }
+    });
 
     return NextResponse.json(data, { status: 200 });
   } catch (error) {

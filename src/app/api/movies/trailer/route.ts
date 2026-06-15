@@ -1,8 +1,5 @@
-import axios from 'axios';
 import { NextResponse } from 'next/server';
-
-const API_KEY_TMDB = process.env.NEXT_PUBLIC_API_KEY_TMDB;
-const BASE_URL = 'https://api.themoviedb.org/3';
+import { tmdb } from '@/lib/tmdb';
 
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
@@ -16,12 +13,7 @@ export async function GET(req: Request) {
   }
 
   try {
-    const { data } = await axios.get(`${BASE_URL}/movie/${movieId}/videos`, {
-      headers: {
-        Accept: 'application/json',
-        Authorization: `Bearer ${API_KEY_TMDB}`
-      }
-    });
+    const { data } = await tmdb.get(`/movie/${movieId}/videos`);
 
     const trailers = data.results.filter(
       (video: any) => video.type === 'Trailer'

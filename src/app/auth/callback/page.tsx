@@ -17,7 +17,6 @@ const AuthCallback = () => {
       return;
     }
     hasFetched.current = true;
-    const API_KEY_TMDB = process.env.NEXT_PUBLIC_API_KEY_TMDB;
     const reqToken = searchParams.get('request_token');
     const approved = searchParams.get('approved');
 
@@ -27,22 +26,14 @@ const AuthCallback = () => {
     }
 
     const createSession = async () => {
-      const { data } = await axios.post(
-        'https://api.themoviedb.org/3/authentication/session/new',
-        { request_token: reqToken },
-        {
-          headers: {
-            accept: 'application/json',
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${API_KEY_TMDB}`
-          }
-        }
-      );
+      const { data } = await axios.post('/api/auth/tmdb-auth/session', {
+        request_token: reqToken
+      });
 
-      if (!data.success) {
+      if (!data.session_id) {
         router.push('/auth/error?message=Failed to create a session');
       } else {
-        dispatch(setSessionId(data?.session_id));
+        dispatch(setSessionId(data.session_id));
         dispatch(setReqToken(null));
         router.push('/');
       }

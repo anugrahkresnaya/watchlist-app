@@ -1,27 +1,16 @@
-import axios from "axios";
-import { NextResponse } from "next/server"
-
-const API_KEY_TMDB = process.env.NEXT_PUBLIC_API_KEY_TMDB;
-const BASE_URL = 'https://api.themoviedb.org/3';
+import { NextResponse } from 'next/server';
+import { tmdb } from '@/lib/tmdb';
 
 export async function GET(req: Request) {
-  const { searchParams } = new URL(req.url)
-  const tvId = searchParams.get('id')
+  const { searchParams } = new URL(req.url);
+  const tvId = searchParams.get('id');
 
   if (!tvId) {
-    return NextResponse.json(
-      { error: 'Tv ID is required' },
-      { status: 400 }
-    );
+    return NextResponse.json({ error: 'Tv ID is required' }, { status: 400 });
   }
 
   try {
-    const { data } = await axios.get(`${BASE_URL}/tv/${tvId}/recommendations`, {
-      headers: {
-        Accept: 'application/json',
-        Authorization: `Bearer ${API_KEY_TMDB}`
-      }
-    })
+    const { data } = await tmdb.get(`/tv/${tvId}/recommendations`);
 
     return NextResponse.json(data, { status: 200 });
   } catch (error) {
